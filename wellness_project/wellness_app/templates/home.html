@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card mt-4">
+    <div class="card-header">
+        <h4>Welcome back, {{ user.username }}!</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <h5>Upcoming Deadlines</h5>
+                <ul class="list-group">
+                    <li class="list-group-item">Information System Assignment - Due April 20</li>
+                    <li class="list-group-item">Project Phase 2 - Due April 20</li>
+                    <li class="list-group-item">Software engineering - Due May 25</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Quick Actions</h5>
+                <a href="{% url 'task_create' %}" class="btn btn-primary mb-2 d-block">Add Task</a>
+                <a href="{% url 'wellness_check' %}" class="btn btn-secondary mb-2 d-block">Wellness Check-in</a>
+                <a href="#" class="btn btn-success d-block">View Schedule</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

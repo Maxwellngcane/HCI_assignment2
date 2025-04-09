@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Daily Wellness Check-in</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">How are you feeling today?</label>
+                        <div class="btn-group d-flex" role="group">
+                            <div class="btn-group mood-selector d-flex mb-4" role="group">
+                                <!-- Stressed -->
+                                <input type="radio" class="btn-check" name="mood" id="mood1" value="1" autocomplete="off">
+                                <label class="btn btn-outline-danger flex-grow-1 py-3" for="mood1">
+                                    <i class="fas fa-frown fa-2x mb-2"></i>
+                                    <div class="fw-medium">Stressed</div>
+                                </label>
+                                
+                                <!-- Okay -->
+                                <input type="radio" class="btn-check" name="mood" id="mood2" value="2" autocomplete="off">
+                                <label class="btn btn-outline-warning flex-grow-1 py-3" for="mood2">
+                                    <i class="fas fa-meh fa-2x mb-2"></i>
+                                    <div class="fw-medium">Okay</div>
+                                </label>
+                                
+                                <!-- Good -->
+                                <input type="radio" class="btn-check" name="mood" id="mood3" value="3" autocomplete="off">
+                                <label class="btn btn-outline-info flex-grow-1 py-3" for="mood3">
+                                    <i class="fas fa-smile fa-2x mb-2"></i>
+                                    <div class="fw-medium">Good</div>
+                                </label>
+                                
+                                <!-- Great -->
+                                <input type="radio" class="btn-check" name="mood" id="mood4" value="4" autocomplete="off">
+                                <label class="btn btn-outline-success flex-grow-1 py-3" for="mood4">
+                                    <i class="fas fa-laugh fa-2x mb-2"></i>
+                                    <div class="fw-medium">Great</div>
+                                </label>
+                                
+                                <!-- Excellent -->
+                                <input type="radio" class="btn-check" name="mood" id="mood5" value="5" autocomplete="off">
+                                <label class="btn btn-outline-primary flex-grow-1 py-3" for="mood5">
+                                    <i class="fas fa-grin-stars fa-2x mb-2"></i>
+                                    <div class="fw-medium">Excellent</div>
+                                </label>
+                            </div>
+                            
+                            <style>
+                                .mood-selector .btn {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    align-items: center;
+                                    transition: all 0.2s;
+                                }
+                                
+                                .mood-selector .btn-check:checked + .btn {
+                                    background-color: var(--bs-btn-active-bg);
+                                    color: var(--bs-btn-active-color);
+                                    transform: translateY(-3px);
+                                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                                    
+                                }
+                                
+                                .mood-selector .btn i {
+                                    transition: transform 0.2s;
+                                }
+                                
+                                .mood-selector .btn-check:checked + .btn i {
+                                    transform: scale(1.2);
+                                }
+                            </style>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sleep" class="form-label">Hours of sleep last night</label>
+                        <input type="number" class="form-control" id="sleep" name="sleep" min="0" max="12">
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Any additional notes?</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Check-in</button>
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
