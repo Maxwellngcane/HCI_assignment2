@@ -1,27 +1,266 @@
 {% extends "base.html" %}
 
 {% block content %}
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalBodyText">
+        <!-- Text will be inserted dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success Toast Notification -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="deleteSuccessToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header bg-success text-white">
+      <strong class="me-auto">Success</strong>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="toastBodyText">
+      <!-- Text will be inserted dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
 <div class="card mt-4">
     <div class="card-header">
-        <h4>Welcome back, {{ user.username }}!</h4>
+        <h4>Welcome back, Senzo Maxwell</h4>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-8">
-                <h5>Upcoming Deadlines</h5>
-                <ul class="list-group">
-                    <li class="list-group-item">Information System Assignment - Due April 20</li>
-                    <li class="list-group-item">Project Phase 2 - Due April 20</li>
-                    <li class="list-group-item">Software engineering - Due May 25</li>
+                <h5 class="h6">Upcoming Deadlines</h5>
+                <ul class="list-group mb-3" id="task-list" style="font-size: 0.9rem;">
+                    <!-- Empty state -->
+                    <li class="list-group-item text-center text-muted py-3" id="no-tasks-message">
+                        No tasks found. <a href="{% url 'task_create' %}">Add your first task</a>
+                    </li>
                 </ul>
+                
+                <div class="card">
+                    <div class="card-header py-2 d-flex justify-content-between align-items-center">
+                        <h5 class="h6 mb-0">Today's Wellness Status</h5>
+                        <button id="delete-wellness-btn" class="btn btn-sm btn-outline-danger d-none" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" data-delete-type="wellness">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                    <div class="card-body py-3" id="wellness-status" style="font-size: 0.9rem;">
+                        <div class="text-center">
+                            <i class="fas fa-user-circle fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-2">You haven't checked in today yet.</p>
+                            <a href="{% url 'wellness_check' %}" class="btn btn-primary btn-sm">Do Wellness Check-in</a>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
             <div class="col-md-4">
-                <h5>Quick Actions</h5>
-                <a href="{% url 'task_create' %}" class="btn btn-primary mb-2 d-block">Add Task</a>
-                <a href="{% url 'wellness_check' %}" class="btn btn-secondary mb-2 d-block">Wellness Check-in</a>
-                <a href="#" class="btn btn-success d-block">View Schedule</a>
+                <h5 class="h6">Quick Actions</h5>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'task_create' %}" class="btn btn-primary btn-sm">Add Task</a>
+                    <a href="{% url 'view_schedule' %}" class="btn btn-success btn-sm">View Schedule</a>
+                    <a href="{% url 'wellness_check' %}" class="btn btn-info btn-sm">Wellness Check-in</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Global variables to track what we're deleting
+    let currentDeleteIndex = null;
+    let currentDeleteType = null;
+
+    // Load tasks when page loads
+    document.addEventListener('DOMContentLoaded', function () {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const taskList = document.getElementById('task-list');
+        const noTasksMessage = document.getElementById('no-tasks-message');
+
+        if (tasks.length > 0) {
+            noTasksMessage.style.display = 'none';
+            
+            tasks.forEach((task, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item d-flex justify-content-between align-items-center py-2';
+                
+                // Make entire task clickable except delete button
+                listItem.style.cursor = 'pointer';
+                
+                const taskText = document.createElement('span');
+                taskText.innerHTML = `
+                    <strong style="font-size: 0.9rem;">${task.title}</strong><br>
+                    <small class="text-muted" style="font-size: 0.8rem;">Due ${task.dueDate}${task.time ? ' at ' + task.time : ''}</small>
+                `;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn btn-sm btn-outline-danger';
+                deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                deleteBtn.setAttribute('data-bs-toggle', 'modal');
+                deleteBtn.setAttribute('data-bs-target', '#deleteConfirmationModal');
+                deleteBtn.setAttribute('data-delete-type', 'task');
+                deleteBtn.setAttribute('data-task-index', index);
+                deleteBtn.onclick = function (e) {
+                    e.stopPropagation();
+                    currentDeleteIndex = index;
+                    currentDeleteType = 'task';
+                    document.getElementById('modalBodyText').textContent = 
+                        `Are you sure you want to delete the task "${task.title}"?`;
+                };
+
+                listItem.appendChild(taskText);
+                listItem.appendChild(deleteBtn);
+                taskList.appendChild(listItem);
+                
+                // Add click handler for task editing
+                listItem.addEventListener('click', function(e) {
+                    if (e.target !== deleteBtn && !deleteBtn.contains(e.target)) {
+                        // Implement task editing here
+                        console.log('Edit task:', task);
+                    }
+                });
+            });
+        }
+        
+        // Load wellness status if exists
+        loadWellnessStatus();
+        
+        // Setup modal confirmation for all delete actions
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+            if (currentDeleteType === 'wellness') {
+                localStorage.removeItem('wellnessCheck');
+                document.getElementById('toastBodyText').textContent = 
+                    'Wellness check-in deleted successfully!';
+            } 
+            else if (currentDeleteType === 'task') {
+                const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                tasks.splice(currentDeleteIndex, 1);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                document.getElementById('toastBodyText').textContent = 
+                    'Task deleted successfully!';
+            }
+            
+            // Hide the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirmationModal'));
+            modal.hide();
+            
+            // Show success toast
+            const toast = new bootstrap.Toast(document.getElementById('deleteSuccessToast'));
+            toast.show();
+            
+            // Reload the appropriate section
+            if (currentDeleteType === 'wellness') {
+                loadWellnessStatus();
+            } else {
+                location.reload(); // Refresh for tasks since the list needs updating
+            }
+        });
+
+        // Setup wellness delete button
+        document.getElementById('delete-wellness-btn').addEventListener('click', function() {
+            currentDeleteType = 'wellness';
+            document.getElementById('modalBodyText').textContent = 
+                'Are you sure you want to delete your wellness check-in data for today?';
+        });
+    });
+
+    function getRandomMessage(mood) {
+        const messages = {
+            1: [ // Stressed
+                "Take a deep breath. You've overcome challenges before and you'll overcome this one too.",
+                "It's okay to feel overwhelmed. Break things down into small steps.",
+                "Remember to take breaks and be kind to yourself today."
+            ],
+            2: [ // Okay
+                "Every day is a new opportunity. What small step can you take today?",
+                "You're doing better than you think. Keep going!",
+                "It's okay to have 'just okay' days. Tomorrow might be brighter."
+            ],
+            3: [ // Good
+                "Your positive energy is contagious! Spread it around today.",
+                "Good days are for making progress. What can you accomplish?",
+                "Keep that positive momentum going!"
+            ],
+            4: [ // Great
+                "You're rocking today! Keep up the great energy!",
+                "Your positive attitude is shining through!",
+                "Great days like this are perfect for tackling big goals!"
+            ],
+            5: [ // Excellent
+                "You're on fire today! The world is yours to conquer!",
+                "This is your day! Channel this energy into something amazing!",
+                "Excellent mood! Use this momentum to create something wonderful!"
+            ]
+        };
+        const moodMessages = messages[mood] || ["Have a wonderful day!"];
+        return moodMessages[Math.floor(Math.random() * moodMessages.length)];
+    }
+    
+    function loadWellnessStatus() {
+        const lastCheck = JSON.parse(localStorage.getItem('wellnessCheck'));
+        const deleteBtn = document.getElementById('delete-wellness-btn');
+        
+        if (lastCheck) {
+            const lastDate = new Date(lastCheck.date);
+            const today = new Date();
+            
+            if (lastDate.toDateString() === today.toDateString()) {
+                const moodIcons = {
+                    '1': 'fa-frown text-danger',
+                    '2': 'fa-meh text-warning',
+                    '3': 'fa-smile text-info',
+                    '4': 'fa-laugh text-success',
+                    '5': 'fa-grin-stars text-primary'
+                };
+                
+                const moodText = {
+                    '1': 'Stressed',
+                    '2': 'Okay',
+                    '3': 'Good',
+                    '4': 'Great',
+                    '5': 'Excellent'
+                };
+                
+                const randomMessage = getRandomMessage(lastCheck.mood);
+                const statusDiv = document.getElementById('wellness-status');
+                statusDiv.innerHTML = `
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas ${moodIcons[lastCheck.mood]} fa-2x me-2"></i>
+                        <h5 class="mb-0" style="font-size: 1rem;">${moodText[lastCheck.mood]}</h5>
+                    </div>
+                    ${lastCheck.sleep ? `<p class="mb-1"><strong>Sleep:</strong> ${lastCheck.sleep} hours</p>` : ''}
+                    ${lastCheck.notes ? `<p class="mb-1"><strong>Notes:</strong> ${lastCheck.notes}</p>` : ''}
+                    <div class="alert alert-${moodText[lastCheck.mood].toLowerCase()} mt-2 mb-3" style="font-size: 0.9rem;">
+                        <i class="fas fa-quote-left me-2"></i>
+                        ${randomMessage}
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'wellness_check' %}" class="btn btn-primary btn-sm">Update Check-in</a>
+                    </div>
+                `;
+                
+                // Show delete button
+                deleteBtn.classList.remove('d-none');
+            } else {
+                // Data exists but not for today
+                deleteBtn.classList.add('d-none');
+            }
+        } else {
+            // No data exists
+            deleteBtn.classList.add('d-none');
+        }
+    }
+</script>
 {% endblock %}

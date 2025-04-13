@@ -3,34 +3,221 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h4>Create New Task</h4>
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+                <h4 class="mb-0">Create New Task</h4>
+                <div id="current-time" class="text-muted small"></div>
             </div>
             <div class="card-body">
-                <form method="post">
+                <form method="post" id="task-form" class="needs-validation" novalidate>
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Task Title</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
+                    
+                    <!-- Task Title Field -->
+                    <div class="mb-4">
+                        <label for="title" class="form-label fw-medium">Task Title</label>
+                        <input type="text" 
+                               class="form-control form-control-lg rounded-3" 
+                               id="title" 
+                               name="title" 
+                               required
+                               placeholder="Enter task description">
+                        <div class="invalid-feedback">
+                            Please provide a task title.
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="due_date" class="form-label">Due Date</label>
-                        <input type="date" class="form-control" id="due_date" name="due_date" required>
+                    
+                    <!-- Due Date Field -->
+                    <div class="mb-4">
+                        <label for="due_date" class="form-label fw-medium">Due Date</label>
+                        <input type="date" 
+                               class="form-control form-control-lg rounded-3" 
+                               id="due_date" 
+                               name="due_date" 
+                               required>
+                        <div class="invalid-feedback">
+                            Please select a due date.
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="priority" class="form-label">Priority</label>
-                        <select class="form-select" id="priority" name="priority">
-                            <option value="low">Low</option>
-                            <option value="medium">Medium</option>
-                            <option value="high">High</option>
-                        </select>
+                    
+                    <!-- Time Field -->
+                    <div class="mb-4">
+                        <label for="task_time" class="form-label fw-medium">Time (optional)</label>
+                        <input type="time" 
+                               class="form-control form-control-lg rounded-3" 
+                               id="task_time" 
+                               name="task_time"
+                               placeholder="Select time">
                     </div>
-                    <button type="submit" class="btn btn-primary">Save Task</button>
-                    <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+                    
+                    <!-- Form Feedback -->
+                    <div id="task-feedback" class="alert alert-danger d-none animate__animated animate__fadeIn"></div>
+                    
+                    <!-- Form Actions -->
+                    <div class="d-grid gap-3 d-md-flex justify-content-md-end mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary px-4 py-2 rounded-3">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary px-4 py-2 rounded-3">
+                            <span class="submit-text">Save Task</span>
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Custom styles for enhanced interaction */
+    body {
+        background-color: #f8f9fa;
+    }
+    
+    .card {
+        border-radius: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    .form-control {
+        border: 1px solid #e0e0e0;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    }
+    
+    .form-control-lg {
+        font-size: 1rem;
+    }
+    
+    .btn {
+        transition: all 0.2s ease;
+    }
+    
+    .btn-primary {
+        background-color: #0d6efd;
+        border: none;
+    }
+    
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+        transform: translateY(-1px);
+    }
+    
+    .btn-primary:active {
+        transform: translateY(0);
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+    }
+    
+    /* Animation for feedback */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate__animated {
+        animation-duration: 0.3s;
+    }
+</style>
+
+<script>
+    // Update current time
+    function updateTime() {
+        const now = new Date();
+        const options = { 
+            weekday: 'short', 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        document.getElementById("current-time").innerText = now.toLocaleDateString('en-US', options);
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // Enhanced form validation and handling
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('task-form');
+        const feedback = document.getElementById('task-feedback');
+        
+        // Add input validation on blur
+        const inputs = form.querySelectorAll('input[required]');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                this.classList.toggle('is-invalid', !this.value);
+            });
+        });
+        
+        // Form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Validate form
+            let isValid = true;
+            inputs.forEach(input => {
+                if (!input.value) {
+                    input.classList.add('is-invalid');
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                feedback.textContent = "Please fill in all required fields.";
+                feedback.classList.remove('d-none');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.querySelector('.submit-text').classList.add('d-none');
+            submitBtn.querySelector('.spinner-border').classList.remove('d-none');
+            
+            // Get form values
+            const taskName = document.getElementById("title").value.trim();
+            const taskDue = document.getElementById("due_date").value.trim();
+            const taskTime = document.getElementById("task_time").value;
+            
+            // Save task to localStorage
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            tasks.push({
+                title: taskName,
+                dueDate: taskDue,
+                time: taskTime
+            });
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            
+            // Simulate API call delay (replace with actual submission in production)
+            setTimeout(() => {
+                // Redirect to home page
+                window.location.href = "{% url 'home' %}";
+            }, 800);
+        });
+        
+        // Input focus effects
+        form.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('label').style.color = '#0d6efd';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.querySelector('label').style.color = '';
+            });
+        });
+    });
+</script>
 {% endblock %}

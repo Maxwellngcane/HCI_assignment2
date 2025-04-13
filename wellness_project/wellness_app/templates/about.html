@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>About | Academic Wellness Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --dark-blue: #003d7a;
+            --light-blue: #e6f0ff;
+            --gray: #6c757d;
+            --light-gray: #f8f9fa;
+            --transition-time: 0.25s;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding-top: 60px;
+        }
+
+        /* Navigation */
+        .sticky-nav {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.75rem 0;
+            z-index: 1020;
+        }
+
+        .back-btn {
+            transition: all var(--transition-time) ease;
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+        }
+
+        .back-btn:hover {
+            background-color: #e9ecef;
+            transform: translateX(-3px);
+        }
+
+        .back-btn:active {
+            transform: translateX(0) scale(0.98);
+        }
+
+        /* Header */
+        .about-header {
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            padding: 2rem 0;
+            background: linear-gradient(135deg, rgba(0, 86, 179, 0.03), rgba(0, 86, 179, 0.01));
+            border-radius: 0 0 20px 20px;
+        }
+
+        .about-title {
+            color: var(--dark-blue);
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .about-subtitle {
+            color: var(--gray);
+            font-weight: 400;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Mission Section */
+        .mission-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            border: none;
+            transition: all var(--transition-time) ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-blue), var(--dark-blue));
+        }
+
+        .mission-icon {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-title {
+            color: var(--dark-blue);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .mission-text {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 3rem 0;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: var(--dark-blue);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-size: 2rem;
+        }
+
+        .team-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: none;
+            transition: all var(--transition-time) ease;
+            text-align: center;
+            height: 100%;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem auto;
+            border: 3px solid var(--light-blue);
+        }
+
+        .team-name {
+            color: var(--dark-blue);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-position {
+            color: var(--primary-blue);
+            font-weight: 500;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .team-bio {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            padding: 3rem 0;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Features Section */
+        .feature-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: none;
+            transition: all var(--transition-time) ease;
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            color: var(--dark-blue);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-text {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-right: 1rem;
+        }
+
+        .contact-item {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .contact-text {
+            color: var(--gray);
+        }
+
+        .contact-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            transition: all var(--transition-time) ease;
+        }
+
+        .contact-link:hover {
+            color: var(--dark-blue);
+            text-decoration: underline;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .about-title {
+                font-size: 2rem;
+            }
+            
+            .about-subtitle {
+                font-size: 1rem;
+            }
+            
+            .mission-card {
+                padding: 1.5rem;
+            }
+            
+            .mission-title {
+                font-size: 1.3rem;
+            }
+            
+            .section-title {
+                font-size: 1.7rem;
+            }
+            
+            .contact-section {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sticky Navigation Back Button -->
+    <nav class="sticky-nav sticky-top">
+        <div class="container">
+            <a href="#" class="btn btn-outline-primary back-btn align-items-center" onclick="window.history.back()" aria-label="Back to home">
+                <i class="fas fa-arrow-left me-2"></i>
+                <span>Back to Home</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header Section -->
+        <header class="about-header">
+            <div class="container">
+                <h1 class="about-title">About Academic Wellness Hub</h1>
+                <p class="about-subtitle">Empowering students to achieve academic success through comprehensive support services and wellness resources</p>
+            </div>
+        </header>
+
+        <!-- Mission Section -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="mission-card">
+                    <div class="mission-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h2 class="mission-title">Our Mission</h2>
+                    <p class="mission-text">
+                        The Academic Wellness Hub is dedicated to fostering student success by providing integrated academic support, wellness resources, and personal development opportunities. We believe that academic achievement is deeply connected to overall well-being, and our holistic approach addresses the diverse needs of today's students. Our mission is to create an inclusive environment where every student can thrive academically while maintaining their physical, mental, and emotional health.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md-3 col-6 stat-item">
+                        <div class="stat-number">5,000+</div>
+                        <div class="stat-label">Students Supported</div>
+                    </div>
+                    <div class="col-md-3 col-6 stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Workshops Offered</div>
+                    </div>
+                    <div class="col-md-3 col-6 stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                    <div class="col-md-3 col-6 stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Online Support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="container my-5">
+            <h2 class="section-title">What We Offer</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3 class="feature-title">Academic Support</h3>
+                        <p class="feature-text">
+                            Personalized tutoring, study skills workshops, writing assistance, and subject-specific help to enhance your academic performance.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3 class="feature-title">Wellness Resources</h3>
+                        <p class="feature-text">
+                            Mental health support, stress management programs, mindfulness sessions, and wellness workshops to maintain balance.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="feature-title">Peer Community</h3>
+                        <p class="feature-text">
+                            Connect with peer mentors, join study groups, and participate in student-led initiatives for collaborative learning.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 class="section-title text-start mb-4">Contact Us</h2>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt contact-icon"></i>
+                        <div>
+                            <h5>Location</h5>
+                            <p class="contact-text">Academic Wellness, NAS Building, Lecture Hall 2<br>Sol Plaatje University Central Campus</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone-alt contact-icon"></i>
+                        <div>
+                            <h5>Phone</h5>
+                            <p class="contact-text">
+                                <a href="tel:+0766731356" class="contact-link">0766731356</a>
+                                <a href="tel:+0761100041" class="contact-link">0761100041</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <div>
+                            <h5>Email</h5>
+                            <p class="contact-text">
+                                <a href="mailto:academicwellnesshub@gmail.com" class="contact-link">academicwellnesshub@gmail.com</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock contact-icon"></i>
+                        <div>
+                            <h5>Hours</h5>
+                            <p class="contact-text">
+                                Monday-Friday: 8:00 AM - 6:00 PM<br>
+                                Saturday: 10:00 AM - 3:00 PM<br>
+                                24/7 Online Resources Available
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple animation for stats counting
+        document.addEventListener('DOMContentLoaded', function() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            statNumbers.forEach(number => {
+                const target = parseInt(number.textContent);
+                let current = 0;
+                const increment = target / 20;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        clearInterval(timer);
+                        number.textContent = target + (number.textContent.includes('+') ? '+' : '');
+                    } else {
+                        number.textContent = Math.floor(current);
+                    }
+                }, 50);
+            });
+        });
+    </script>
+</body>
+</html>

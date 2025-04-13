@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Resources - Academic Wellness Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --primary-hover: #0b5ed7;
+            --accent-1: #dc3545;
+            --accent-2: #20c997;
+            --accent-3: #ffc107;
+            --accent-4: #6610f2;
+            --accent-5: #198754;
+            --accent-6: #fd7e14;
+            --accent-7: #0dcaf0;
+            --transition-time: 0.25s;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .sticky-nav {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.75rem 0;
+        }
+
+        .back-btn {
+            transition: all var(--transition-time) ease;
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+        }
+
+        .back-btn:hover {
+            background-color: #e9ecef;
+            transform: translateX(-3px);
+        }
+
+        .back-btn:active {
+            transform: translateX(0) scale(0.98);
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin: 2rem 0 1.5rem;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+            transition: width var(--transition-time) ease;
+        }
+
+        .page-header:hover .page-title::after {
+            width: 120px;
+        }
+
+        .page-subtitle {
+            color: #6c757d;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+            position: relative;
+        }
+
+        .search-bar {
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            width: 100%;
+            padding-left: 3rem;
+        }
+
+        .search-bar:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 12px rgba(13, 110, 253, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            transition: color 0.3s ease;
+        }
+
+        .search-bar:focus+.search-icon {
+            color: var(--primary-color);
+        }
+
+        /* Resource Cards */
+        .resource-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all var(--transition-time) ease;
+            overflow: hidden;
+            height: 100%;
+            position: relative;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(13, 110, 253, 0.05), transparent);
+            opacity: 0;
+            transition: opacity var(--transition-time) ease;
+        }
+
+        .resource-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .resource-icon {
+            font-size: 2rem;
+            transition: all var(--transition-time) ease;
+            margin-bottom: 1rem;
+        }
+
+        .resource-card:hover .resource-icon {
+            transform: scale(1.2);
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.75rem;
+            transition: color var(--transition-time) ease;
+        }
+
+        .resource-card:hover .card-title {
+            color: var(--primary-color);
+        }
+
+        .card-text {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .resource-link {
+            display: inline-block;
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+            transition: all var(--transition-time) ease;
+        }
+
+        .resource-link:hover {
+            color: var(--primary-hover);
+            transform: translateX(5px);
+        }
+
+        .resource-link i {
+            margin-left: 5px;
+            transition: margin-left var(--transition-time) ease;
+        }
+
+        .resource-link:hover i {
+            margin-left: 8px;
+        }
+
+        /* Icon Colors */
+        .icon-academic {
+            color: var(--primary-color);
+        }
+
+        .icon-wellness {
+            color: var(--accent-1);
+        }
+
+        .icon-study {
+            color: var(--accent-2);
+        }
+
+        .icon-task {
+            color: var(--accent-3);
+        }
+
+        .icon-peer {
+            color: var(--accent-4);
+        }
+
+        .icon-links {
+            color: #6c757d;
+        }
+
+        .icon-finance {
+            color: var(--accent-5);
+        }
+
+        .icon-tutor {
+            color: var(--accent-6);
+        }
+
+        .icon-events {
+            color: var(--accent-7);
+        }
+
+        /* Focus States */
+        a:focus,
+        button:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .resource-icon {
+                font-size: 1.75rem;
+            }
+
+            .card-body {
+                padding: 1.25rem;
+            }
+
+            .search-container {
+                margin-bottom: 2rem;
+                padding: 0 15px;
+            }
+
+            .search-bar {
+                padding-left: 2.5rem;
+            }
+
+            .search-icon {
+                left: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Enhanced Sticky Back Button -->
+    <nav class="sticky-nav sticky-top">
+        <div class="container">
+            <a href="{% url 'home' %}" class="btn btn-outline-primary back-btn align-items-center"
+                aria-label="Back to home">
+                <i class="fas fa-arrow-left me-2"></i>
+                <span>Back to Home</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Student Support Resources</h1>
+            <p class="page-subtitle">Discover all the academic and wellness resources available to help you succeed</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="form-control search-bar" placeholder="Search resources..."
+                aria-label="Search resources">
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Academic Advising -->
+            <div class="col-md-4">
+                <div class="card resource-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-user-graduate resource-icon icon-academic"></i>
+                        <h5 class="card-title">Academic Advising</h5>
+                        <p class="card-text">Get help with course planning, scheduling, and academic goals from our
+                            expert advisors.</p>
+                        <a href="#" class="resource-link" aria-label="Learn more about Academic Advising">
+                            Learn more <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wellness Center -->
+            <div class="col-md-4">
+                <div class="card resource-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-heartbeat resource-icon icon-wellness"></i>
+                        <h5 class="card-title">Wellness Center</h5>
+                        <p class="card-text">Mental health check-ins, counseling, and stress management support
+                            services.</p>
+                        <a href="#" class="resource-link" aria-label="Learn more about Wellness Center">
+                            Learn more <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Study Guides -->
+            <div class="col-md-4">
+                <div class="card resource-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-book-open resource-icon icon-study"></i>
+                        <h5 class="card-title">Study Guides</h5>
+                        <p class="card-text">Access helpful study materials and exam prep guides organized by subject
+                            area.</p>
+                        <a href="#" class="resource-link" aria-label="Learn more about Study Guides">
+                            Learn more <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task Tracker -->
+            <div class="col-md-4">
+                <div class="card resource-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-clipboard-check resource-icon icon-task"></i>
+                        <h5 class="card-title">Task Tracker</h5>
+                        <p class="card-text">Stay organized with personalized to-do lists, tasks, and deadline
+                            reminders.</p>
+                        <a href="#" class="resource-link" aria-label="Learn more about Task Tracker">
+                            Learn more <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Peer Support -->
+            <div class="col-md-4">
+                <div class="card resource-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-hand-holding-heart resource-icon icon-peer"></i>
+                        <h5 class="card-title">Peer Support</h5>
+                        <p class="card-text">Join support groups and connect with other students facing similar
+                            challenges.</p>
+                        <a href="#" class="resource-link" aria-label="Learn more about Peer Support">
+                            Learn more <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Useful Links -->
+            <div class="col-md-4">
+                <div class="card resource-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-link resource-icon icon-links"></i>
+                        <h5 class="card-title">Useful Links</h5>
+                        <p class="card-text">Browse external tools, platforms, and university services all in one place.
+                        </p>
+                        <a href="#" class="resource-link" aria-label="Learn more about Useful Links">
+                            Learn more <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Aid -->
+            <div class="col-md-4">
+                <div class="card resource-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-piggy-bank resource-icon icon-finance"></i>
+                        <h5 class="card-title">Financial Aid</h5>
+                        <p class="card-text">Apply for scholarships, bursaries, or student financial support programs.
+                        </p>
+                        <a href="#" class="resource-link" aria-label="Learn more about Financial Aid">
+                            Learn more <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tutoring Services -->
+            <div class="col-md-4">
+                <div class="card resource-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-chalkboard-teacher resource-icon icon-tutor"></i>
+                        <h5 class="card-title">Tutoring Services</h5>
+                        <p class="card-text">Book 1-on-1 tutoring sessions with qualified tutors for academic subjects.
+                        </p>
+                        <a href="#" class="resource-link" aria-label="Learn more about Tutoring Services">
+                            Learn more <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workshops & Events -->
+            <div class="col-md-4">
+                <div class="card resource-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-users resource-icon icon-events"></i>
+                        <h5 class="card-title">Workshops & Events</h5>
+                        <p class="card-text">Join skill-building workshops, webinars, and study groups throughout the
+                            term.</p>
+                        <a href="#" class="resource-link" aria-label="Learn more about Workshops & Events">
+                            Learn more <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add click handlers to all resource cards
+            const resourceCards = document.querySelectorAll('.resource-card');
+
+            resourceCards.forEach(card => {
+                // Click handler
+                card.addEventListener('click', function (e) {
+                    // Don't navigate if clicking on the link
+                    if (e.target.tagName === 'A' || e.target.parentElement.tagName === 'A') {
+                        return;
+                    }
+
+                    // Find the link in the card and click it
+                    const link = this.querySelector('a');
+                    if (link) {
+                        link.click();
+                    }
+                });
+
+                // Keyboard navigation support
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+
+                // Touch feedback for mobile
+                card.addEventListener('touchstart', function () {
+                    this.style.transform = 'translateY(-4px)';
+                }, { passive: true });
+
+                card.addEventListener('touchend', function () {
+                    this.style.transform = '';
+                }, { passive: true });
+            });
+
+            // Add animation to page title
+            const pageTitle = document.querySelector('.page-title');
+            pageTitle.style.opacity = '0';
+            pageTitle.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                pageTitle.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                pageTitle.style.opacity = '1';
+                pageTitle.style.transform = 'translateY(0)';
+            }, 100);
+
+            // Search functionality
+            const searchBar = document.querySelector('.search-bar');
+
+            searchBar.addEventListener('input', function () {
+                const searchTerm = this.value.toLowerCase();
+                const cards = document.querySelectorAll('.resource-card');
+
+                cards.forEach(card => {
+                    const cardTitle = card.querySelector('.card-title').textContent.toLowerCase();
+                    const cardText = card.querySelector('.card-text').textContent.toLowerCase();
+
+                    if (cardTitle.includes(searchTerm) || cardText.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+
+            // Allow search on Enter key
+            searchBar.addEventListener('keyup', function (e) {
+                if (e.key === 'Enter') {
+                    this.blur(); // Remove focus from search bar
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
